@@ -3,6 +3,11 @@ kind: Namespace
 metadata:
   name: {{ .Values.namespaces.operator | quote }}
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.cluster | quote }}
+---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -278,8 +283,8 @@ spec:
       serviceAccountName: {{ .Values.namespaces.operator | quote }}
       containers:
       - name: rook-ceph-operator
-        image: "{{ .Values.images.operator.repository }}:{{ .Values.images.operator.tag }}"
-        pullPolicy: {{ .Values.images.operator.pullPolicy | quote }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        pullPolicy: {{ .Values.image.pullPolicy | quote }}
         args: ["ceph", "operator"]
         env:
         # To disable RBAC, uncomment the following:
