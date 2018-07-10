@@ -2,9 +2,10 @@ replicaCount:
   mon: 3
 
 image:
-  repository: nginx
-  tag: stable
-  pullPolicy: IfNotPresent
+  toolbox:
+    repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/rook/ceph-toolbox
+    tag: master
+    pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
