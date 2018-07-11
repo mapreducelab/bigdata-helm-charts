@@ -1,9 +1,8 @@
-replicaCount:
-  mon: 3
+replicaCount: 1
 
 image:
-  repository: nginx
-  tag: stable
+  repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/alluxio
+  tag: 0.3.0
   pullPolicy: IfNotPresent
 
 service:
@@ -35,17 +34,8 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-nodeSelector:
-  all:
-    key: role
-    value: storage
+nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
-
-namespaces:
-  operator: rook-ceph-system
-  cluster: rook-ceph
-
-serviceAccount: rook-ceph-cluster
