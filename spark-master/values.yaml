@@ -1,0 +1,26 @@
+replicaCount: 1
+
+image:
+  repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/spark
+  tag: 2.3.1_v7
+  pullPolicy: IfNotPresent
+  command: ["/start-master"]
+
+ingress:
+  enabled: false
+  
+service:
+  type: None
+  portUI: 8080
+  portRPC: 7077
+
+resources:
+  requests:
+    cpu: 100m
+
+nodeSelector:
+  role: compute
+
+tolerations: []
+
+affinity: {}
