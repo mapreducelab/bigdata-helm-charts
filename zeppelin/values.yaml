@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/zeppelin
+  tag: 0.8.0_v1
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8080
+
+ingress:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
