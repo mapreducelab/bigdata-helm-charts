@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: "2.3.1"
 description: A Helm chart for Spark Master.
 name: spark-master
-version: 0.1.0
+version: 0.1.1

@@ -1,8 +1,8 @@
-replicaCount: 3
+replicaCount: 2
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/spark
-  tag: 2.3.1_v7
+  tag: "0.1.5"
   pullPolicy: IfNotPresent
   command: ["/start-worker"]
 
@@ -21,10 +21,3 @@ nodeSelector:
 tolerations: []
 
 affinity: {}
-  # requiredDuringSchedulingIgnoredDuringExecution:
-  #   nodeSelectorTerms:
-  #   - matchExpressions:
-  #     - key: role
-  #       operator: In
-  #       values:
-  #       - compuasdasd

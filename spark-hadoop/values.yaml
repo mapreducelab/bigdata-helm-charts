@@ -1,0 +1,28 @@
+replicaCount: 1
+
+image:
+  repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/spark-hadoop
+  tag: 0.1.5
+  pullPolicy: IfNotPresent
+  command: ["/start-master"]
+
+ingress:
+  enabled: false
+  
+service:
+  type: None
+  portUI: 8080
+  portRPC: 7077
+
+resources:
+  limits:
+    cpu: 1
+  requests:
+    cpu: 100m
+
+nodeSelector:
+  role: compute
+
+tolerations: []
+
+affinity: {}

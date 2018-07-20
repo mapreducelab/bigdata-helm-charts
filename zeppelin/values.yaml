@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/zeppelin
-  tag: 0.8.0_v2
+  tag: 0.1.1
   pullPolicy: IfNotPresent
 
 service:
@@ -16,7 +16,8 @@ resources:
   requests:
     cpu: 100m
 
-nodeSelector: {}
+nodeSelector:
+  role: support
 
 tolerations: []
 

@@ -8,7 +8,6 @@ image:
 service:
   type: NodePort
   port: 80
-  nodePort: 31012
 
 ingress:
   enabled: false
@@ -17,15 +16,9 @@ resources:
   requests:
     cpu: 100m
 
-nodeSelector: {}
+nodeSelector:
+  role: support
 
 tolerations: []
 
-affinity:
-  requiredDuringSchedulingIgnoredDuringExecution:
-    nodeSelectorTerms:
-    - matchExpressions:
-      - key: role
-        operator: In
-        values:
-        - support
+affinity: {}
