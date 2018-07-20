@@ -1,0 +1,25 @@
+replicaCount: 2
+
+image:
+  repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/spark-hadoop
+  tag: 0.1.5
+  pullPolicy: IfNotPresent
+  command: ["/start-worker"]
+
+service: {}
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 2
+  requests:
+    cpu: 100m
+
+nodeSelector:
+  role: compute
+
+tolerations: []
+
+affinity: {}
