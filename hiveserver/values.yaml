@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/hiveserver2
+  tag: 0.1.8
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  portHTTP: 10001
+  portUI: 10002
+
+ingress:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+
+nodeSelector:
+  role: support
+
+tolerations: []
+
+affinity: {}
