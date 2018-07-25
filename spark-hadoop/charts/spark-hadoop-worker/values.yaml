@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/spark-hadoop
-  tag: 0.1.5
+  tag: "0.1.6"
   pullPolicy: IfNotPresent
   command: ["/start-worker"]
 
