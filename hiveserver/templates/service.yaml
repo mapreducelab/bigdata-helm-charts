@@ -37,3 +37,23 @@ spec:
   selector:
     app: {{ template "hiveserver.name" . }}
     release: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zeppelin-external
+  labels:
+    app: zeppelin-external
+    chart: {{ template "hiveserver.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: NodePort
+  ports:
+    - port: {{ .Values.service.portHTTP }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "hiveserver.name" . }}
+    release: {{ .Release.Name }}
