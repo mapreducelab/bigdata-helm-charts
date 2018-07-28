@@ -1,0 +1,154 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "openfaas.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: gateway
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: gateway
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  replicas: {{ .Values.gateway.replicas }}
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      {{- if .Values.operator.create }}
+      serviceAccountName: {{ .Release.Name }}-operator
+      {{- else }}
+      serviceAccountName: {{ .Release.Name }}-controller
+      {{- end }}
+      {{- if .Values.securityContext }}
+      securityContext:
+        readOnlyRootFilesystem: true
+        runAsUser: 10001
+      {{- end }}
+      {{- if .Values.basic_auth }}
+      volumes:
+      - name: auth
+        secret:
+          secretName: basic-auth
+      {{- end }}
+      containers:
+      - name: gateway
+        image: {{ .Values.gateway.image }}
+        imagePullPolicy: {{ .Values.openfaasImagePullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          timeoutSeconds: 2
+        env:
+        - name: read_timeout
+          value: "{{ .Values.gateway.readTimeout }}"
+        - name: write_timeout
+          value: "{{ .Values.gateway.writeTimeout }}"
+        - name: upstream_timeout
+          value: "{{ .Values.gateway.upstreamTimeout }}"
+        - name: functions_provider_url
+          value: "http://127.0.0.1:8081/"
+        {{- if .Values.async }}
+        - name: faas_nats_address
+          value: "nats.{{ .Release.Namespace }}.svc.cluster.local."
+        - name: faas_nats_port
+          value: "4222"
+        - name: direct_functions
+          value: "true"
+        - name: direct_functions_suffix
+          value: "{{ $functionNs }}.svc.cluster.local."
+        {{- end }}
+        {{- if .Values.basic_auth }}
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: "/var/secrets"
+        {{- end }}
+        - name: scale_from_zero
+          value: "{{ .Values.gateway.scaleFromZero }}"
+        {{- if .Values.basic_auth }}
+        volumeMounts:
+        - name: auth
+          readOnly: true
+          mountPath: "/var/secrets"
+        {{- end }}
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      {{- if .Values.operator.create }}
+      - name: operator
+        image: {{ .Values.operator.image }}
+        imagePullPolicy: Always
+        command:
+          - ./openfaas-operator
+          - -logtostderr
+          - -v=2
+        env:
+        - name: function_namespace
+          value: {{ $functionNs | quote }}
+        - name: read_timeout
+          value: "{{ .Values.faasnetesd.readTimeout }}"
+        - name: write_timeout
+          value: "{{ .Values.faasnetesd.writeTimeout }}"
+        - name: image_pull_policy
+          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+      {{- else }}
+      - name: faas-netes
+        image: {{ .Values.faasnetesd.image }}
+        imagePullPolicy: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        env:
+        - name: port
+          value: "8081"
+        - name: function_namespace
+          value: {{ $functionNs | quote }}
+        - name: read_timeout
+          value: "{{ .Values.faasnetesd.readTimeout }}"
+        - name: write_timeout
+          value: "{{ .Values.faasnetesd.writeTimeout }}"
+        - name: image_pull_policy
+          value: {{ .Values.faasnetesd.imagePullPolicy | quote }}
+        - name: http_probe
+          value: "{{ .Values.faasnetesd.httpProbe }}"
+        - name: readiness_probe_initial_delay_seconds
+          value: "{{ .Values.faasnetesd.readinessProbe.initialDelaySeconds }}"
+        - name: readiness_probe_timeout_seconds
+          value: "{{ .Values.faasnetesd.readinessProbe.timeoutSeconds }}"
+        - name: readiness_probe_period_seconds
+          value: "{{ .Values.faasnetesd.readinessProbe.periodSeconds }}"
+        - name: liveness_probe_initial_delay_seconds
+          value: "{{ .Values.faasnetesd.livenessProbe.initialDelaySeconds }}"
+        - name: liveness_probe_timeout_seconds
+          value: "{{ .Values.faasnetesd.livenessProbe.timeoutSeconds }}"
+        - name: liveness_probe_period_seconds
+          value: "{{ .Values.faasnetesd.livenessProbe.periodSeconds }}"
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+      {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

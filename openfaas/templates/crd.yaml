@@ -1,0 +1,16 @@
+{{- $functionNs := default .Release.Namespace .Values.functionNamespace }}
+{{- if .Values.operator.create }}
+{{- if .Values.operator.createCRD }}
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: functions.openfaas.com
+spec:
+  group: openfaas.com
+  version: v1alpha2
+  names:
+    kind: Function
+    plural: functions
+  scope: Namespaced
+{{- end }}
+{{- end }}
