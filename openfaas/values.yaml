@@ -1,0 +1,92 @@
+functionNamespace:
+
+async: true
+
+exposeServices: true
+serviceType: NodePort
+rbac: true
+securityContext: true
+basic_auth: false
+
+faasnetesd:
+  image: art-hq.intranet.qualys.com:5001/k8s.gcr.io/faas-netes:0.5.7
+  readTimeout : "20s"
+  writeTimeout : "20s"
+  imagePullPolicy : "Always"    # Image pull policy for deployed functions
+  httpProbe: false              # Setting to true will use a lock file for readiness and liveness
+  readinessProbe:
+    initialDelaySeconds: 0
+    timeoutSeconds: 1
+    periodSeconds: 1
+  livenessProbe:
+    initialDelaySeconds: 3
+    timeoutSeconds: 1
+    periodSeconds: 10
+
+gateway:
+  image: art-hq.intranet.qualys.com:5001/k8s.gcr.io/gateway:0.8.9
+  readTimeout : "20s"
+  writeTimeout : "20s"
+  upstreamTimeout : "15s"  # Must be smaller than read/write_timeout
+  replicas: 1
+  scaleFromZero: false
+  # change the port when creating multiple releases in the same baremetal cluster
+  nodePort: 31112
+
+queueWorker:
+  image: art-hq.intranet.qualys.com:5001/k8s.gcr.io/queue-worker:0.4.8
+  ackWait : "30s"
+  replicas: 1
+
+# image pull policy for openfaas components, can change to `IfNotPresent` in offline env
+openfaasImagePullPolicy: "Always"
+
+# replaces faas-netes with openfaas-operator
+operator:
+  image: art-hq.intranet.qualys.com:5001/k8s.gcr.io/openfaas-operator:0.8.2
+  create: false
+  # set this to false when creating multiple releases in the same cluster
+  # must be true for the first one only
+  createCRD: true
+
+# monitoring and auto-scaling components
+prometheus:
+  image: art-hq.intranet.qualys.com:5001/k8s.gcr.io/prometheus:v2.3.1
+alertmanager:
+  image: art-hq.intranet.qualys.com:5001/k8s.gcr.io/alertmanager:v0.15.0
+
+# async provider
+nats:
+  image: art-hq.intranet.qualys.com:5001/k8s.gcr.io/nats-streaming:0.6.0
+
+# ingress configuration
+ingress:
+  enabled: false
+  # Used to create Ingress record (should be used with exposeServices: false).
+  hosts:
+    - host: faas-netes.openfaas.local
+      serviceName: faas-netes
+      servicePort: 8080
+      path: /
+    - host: gateway.openfaas.local
+      serviceName: gateway
+      servicePort: 8080
+      path: /
+    - host: prometheus.openfaas.local
+      serviceName: prometheus
+      servicePort: 9090
+      path: /
+    - host: alertmanager.openfaas.local
+      serviceName: alertmanager
+      servicePort: 9093
+      path: /
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  tls:
+    # Secrets must be manually created in the namespace.
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
