@@ -7,7 +7,7 @@ spec:
   dnsPolicy: ClusterFirstWithHostNet
   containers:
   - name: rook-ceph-tools
-    image: "{{ .Values.image.toolbox.repository }}:{{ .Values.image.tag }}"
+    image: "{{ .Values.image.toolbox.repository }}:{{ .Values.image.toolbox.tag }}"
     pullPolicy: {{ .Values.image.pullPolicy | quote }}
     env:
       - name: ROOK_ADMIN_SECRET
