@@ -12,7 +12,7 @@ data:
     alluxio.underfs.address=s3a://spark/test/
     aws.accessKeyId=<id>
     aws.secretKey=<key>
-    alluxio.underfs.s3.endpoint=10.103.207.247:80
+    alluxio.underfs.s3.endpoint=<ip>:80
     alluxio.underfs.s3.disable.dns.buckets=true
     alluxio.underfs.s3a.inherit_acl=true
     alluxio.master.hostname=alluxio-master
