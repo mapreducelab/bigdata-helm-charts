@@ -8,7 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
+  clusterIP: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.portHTTP }}
       targetPort: http
@@ -33,6 +33,7 @@ spec:
     - port: {{ .Values.service.portUI }}
       targetPort: ui
       protocol: TCP
+      nodePort: {{ .Values.service.nodePortUI }}
       name: ui
   selector:
     app: {{ template "hiveserver.name" . }}
@@ -41,9 +42,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: zeppelin-external
+  name: hiveserver-external
   labels:
-    app: zeppelin-external
+    app: hiveserver-external
     chart: {{ template "hiveserver.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -53,6 +54,7 @@ spec:
     - port: {{ .Values.service.portHTTP }}
       targetPort: http
       protocol: TCP
+      nodePort: {{ .Values.service.nodePortHTTP }}
       name: http
   selector:
     app: {{ template "hiveserver.name" . }}

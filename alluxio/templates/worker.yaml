@@ -1,13 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: alluxio-worker
 spec:
+  selector:
+    matchLabels:
+      name: alluxio-worker
   template:
     metadata:
       labels:
         name: alluxio-worker
-        app: alluxio
     spec:
       hostNetwork: true
       hostPID: true
