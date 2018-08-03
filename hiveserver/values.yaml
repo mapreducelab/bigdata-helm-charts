@@ -2,13 +2,15 @@ replicaCount: 1
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/hiveserver
-  tag: 0.1.15
+  tag: 0.1.23
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  type: None
   portHTTP: 10001
   portUI: 10002
+  nodePortUI: 30004
+  nodePortHTTP: 30005
 
 ingress:
   enabled: false

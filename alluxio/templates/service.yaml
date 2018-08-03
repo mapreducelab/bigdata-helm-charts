@@ -8,10 +8,10 @@ spec:
   ports:
   - port: 19998
     name: rpc
-    nodePort: 31001
+    nodePort: {{ .Values.service.nodePortRPC }}
   - port: 19999
     name: web
-    nodePort: 31002
+    nodePort: {{ .Values.service.nodePortUI }}
   type: NodePort
   selector:
     app: alluxio-master
