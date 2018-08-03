@@ -33,14 +33,10 @@ spec:
               containerPort: 8080
               protocol: TCP
           livenessProbe:
-            initialDelaySeconds: 15
-            periodSeconds: 20
             httpGet:
               path: /
               port: webui
           readinessProbe:
-            initialDelaySeconds: 5
-            periodSeconds: 10
             httpGet:
               path: /
               port: webui

@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/spark
-  tag: "0.1.7"
+  tag: 0.1.10
   pullPolicy: IfNotPresent
   command: ["/start-master"]
 

@@ -2,12 +2,13 @@ replicaCount: 1
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/zeppelin
-  tag: 0.1.12
+  tag: 0.1.18
   pullPolicy: IfNotPresent
 
 service:
   type: NodePort
   port: 8080
+  nodePortUI: 30009
 
 ingress:
   enabled: false
@@ -16,8 +17,7 @@ resources:
   requests:
     cpu: 100m
 
-nodeSelector:
-  role: support
+nodeSelector: {}
 
 tolerations: []
 

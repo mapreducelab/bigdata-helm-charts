@@ -19,6 +19,7 @@ spec:
         app: {{ template "hiveserver.name" . }}
         release: {{ .Release.Name }}
     spec:
+      hostname: hiveserver
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
