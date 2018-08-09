@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/hiveserver
-  tag: 0.1.23
+  tag: 0.1.33
   pullPolicy: IfNotPresent
 
 service:

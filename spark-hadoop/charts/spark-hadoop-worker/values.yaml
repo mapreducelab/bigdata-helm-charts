@@ -1,8 +1,8 @@
-replicaCount: 2
+replicaCount: 5
 
 image:
   repository: art-hq.intranet.qualys.com:5001/k8s.gcr.io/spark-hadoop
-  tag: 0.1.8
+  tag: 0.1.14
   pullPolicy: IfNotPresent
   command: ["/start-worker"]
 

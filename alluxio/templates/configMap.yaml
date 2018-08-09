@@ -4,15 +4,13 @@ metadata:
   name: alluxio-config
   namespace: default
 data:
-  AWS_ACCESS_KEY_ID: <id>
-  AWS_SECRET_ACCESS_KEY: <id>
+  AWS_ACCESS_KEY_ID: CL8SZ2XBDF3VCDK0WETS
+  AWS_SECRET_ACCESS_KEY: cr5LAEVAusbQG0b2Hv6XpPiHHuJN37Bxcc8MD6Gy
   ALLUXIO_CONFIG: |-
     alluxio.security.authentication.type=SIMPLE
     alluxio.security.login.username=root
     alluxio.underfs.address=s3a://qlake/qdw/
-    aws.accessKeyId=<id>
-    aws.secretKey=<id>
-    alluxio.underfs.s3.endpoint=masifgw01:<port>
+    alluxio.underfs.s3.endpoint=masifgw01.p02.eng.sjc01.qualys.com:50164
     alluxio.underfs.s3.disable.dns.buckets=true
-    alluxio.underfs.s3a.inherit_acl=true
+    alluxio.underfs.s3a.inherit_acl=false
     alluxio.master.hostname=alluxio-master
